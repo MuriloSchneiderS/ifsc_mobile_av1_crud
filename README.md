@@ -1,8 +1,8 @@
 # ifsc_mobile_av1_crud
  App em flutter que realiza um CRUD para a seguinte aplicação: App de tarefas. O objetivo é criar um aplicativo onde o usuário possa cadastrar, visualizar, editar e excluir tarefas utilizando flutter.
 
-Cada tarefa deve ter no mínimo os seguintes atributos: id, título, descrição, data prevista para
-realização, importante (boolean), realizada(boolean).
+Cada tarefa deve ter no mínimo os seguintes atributos: 
+id, título, descrição, data prevista para realização, importante (boolean), realizada(boolean).
 
 Requisitos e item que serão avaliados:
 1. Crie um atributo a mais para a sua tarefa (de escolha de cada estudante).
