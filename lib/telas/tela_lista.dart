@@ -19,7 +19,7 @@ class tela_lista extends StatelessWidget {
         title: Text(titulo),
       ),
       body: const Center(
-        child: Text('Conteúdo da Tela de Lista'),
+        child: Text('Lista de Tarefas'),
       ),
     );
   }

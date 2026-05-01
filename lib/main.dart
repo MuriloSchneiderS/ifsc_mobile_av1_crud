@@ -14,10 +14,15 @@ no dia da entrega 30/04, 07/05 e 08/05.
 
 12. Entrega e apresentação para o professor: sexta dia 08/05. Deverá ser enviado o link do seu
 repositório pelo moodle.
-
 */
 import 'package:flutter/material.dart';
-import 'package:ifsc_mobile_av1_crud/telas/tela_lista.dart';
+import 'package:ifsc_mobile_av1_crud/util/rotas.dart';
+import 'telas/tela_inicial.dart';
+import 'telas/tela_lista.dart';
+import 'telas/tela_form.dart';
+import 'telas/tela_detalhes.dart';
+import 'providers/tarefa_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,15 +33,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'App de Tarefas',
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+    return ChangeNotifierProvider(
+      create: (context) => TarefaProvider(),
+      child: MaterialApp(
+        title: 'App de Tarefas',
+        theme: ThemeData(
+          colorScheme:  ColorScheme.fromSeed(seedColor: Colors.green),
+        ),
+        initialRoute: Rotas.telaInicial,
+        routes: {
+          Rotas.telaInicial: (context) => const tela_inicial(titulo: 'Início'),
+          Rotas.telaLista: (context) => const tela_lista(titulo: 'Lista de Tarefas'),
+          Rotas.telaForm: (context) => const tela_form(titulo: 'Formulário de Tarefas'),
+          Rotas.telaDetalhes: (context) => const tela_detalhes(titulo: 'Detalhes da Tarefa'),
+        },
       ),
-      home: const tela_lista(titulo: 'Lista de Tarefas'),
-      routes: {
-
-      },
     );
   }
 }
