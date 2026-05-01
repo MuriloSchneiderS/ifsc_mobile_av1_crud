@@ -6,7 +6,6 @@ armazenada como Text, pesquise como você pode fazer essa transformação.
 */
 import 'package:sqflite/sqflite.dart' as sqlite;
 import 'package:path/path.dart' as path;
-import 'package:provider/provider.dart';
 
 class DBUtil{
   static Future<sqlite.Database> getDatabase() async {

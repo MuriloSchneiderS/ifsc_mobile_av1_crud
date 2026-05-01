@@ -3,7 +3,6 @@
 mostra o título e data prevista da tarefa mais perto de ser vencida.
 */
 import 'package:flutter/material.dart';
-import 'package:ifsc_mobile_av1_crud/util/rotas.dart';
 
 class tela_inicial extends StatelessWidget {
   final String titulo;
