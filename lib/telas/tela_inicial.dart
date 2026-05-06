@@ -8,21 +8,30 @@ import 'package:ifsc_mobile_av1_crud/providers/tarefa_provider.dart';
 import 'package:ifsc_mobile_av1_crud/util/rotas.dart';
 import 'package:provider/provider.dart';
 
-class tela_inicial extends StatelessWidget {
+class TelaInicial extends StatefulWidget {
   final String titulo;
-  const tela_inicial({super.key, required this.titulo});
+  const TelaInicial({super.key, required this.titulo});
+
+  @override
+  State<TelaInicial> createState() => _TelaInicialState();
+}
+
+class _TelaInicialState extends State<TelaInicial> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () => Provider.of<TarefaProvider>(context, listen: false).loadTarefas(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<TarefaProvider>(context);
-    provider.loadTarefas();
     final List<Tarefa> tarefas = provider.tarefas;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(titulo),
-      ),
+      appBar: AppBar(title: Text(widget.titulo)),
       body: Center(
-
         child: tarefas.isEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,

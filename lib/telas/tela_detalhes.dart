@@ -4,9 +4,9 @@ realizar a tarefa.
 */
 import 'package:flutter/material.dart';
 
-class tela_detalhes extends StatelessWidget {
+class TelaDetalhes extends StatelessWidget {
   final String titulo;
-  const tela_detalhes({super.key, required this.titulo});
+  const TelaDetalhes({super.key, required this.titulo});
 
   @override
   Widget build(BuildContext context) {

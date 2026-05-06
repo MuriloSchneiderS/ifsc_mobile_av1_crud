@@ -40,11 +40,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme:  ColorScheme.fromSeed(seedColor: Colors.green),
         ),
-        home: const tela_inicial(titulo: 'Início'),
+        home: const TelaInicial(titulo: 'Início'),
         routes: {
-          Rotas.telaLista: (context) => const tela_lista(titulo: 'Lista de Tarefas'),
-          Rotas.telaForm: (context) => const tela_form(titulo: 'Formulário de Tarefas'),
-          Rotas.telaDetalhes: (context) => const tela_detalhes(titulo: 'Detalhes da Tarefa'),
+          Rotas.telaLista: (context) => const TelaLista(titulo: 'Lista de Tarefas'),
+          Rotas.telaForm: (context) => const TelaForm(titulo: 'Formulário de Tarefas'),
+          Rotas.telaDetalhes: (context) => const TelaDetalhes(titulo: 'Detalhes da Tarefa'),
         },
       ),
     );
