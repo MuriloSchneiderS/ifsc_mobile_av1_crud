@@ -40,9 +40,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme:  ColorScheme.fromSeed(seedColor: Colors.green),
         ),
-        initialRoute: Rotas.telaInicial,
+        home: const tela_inicial(titulo: 'Início'),
         routes: {
-          Rotas.telaInicial: (context) => const tela_inicial(titulo: 'Início'),
           Rotas.telaLista: (context) => const tela_lista(titulo: 'Lista de Tarefas'),
           Rotas.telaForm: (context) => const tela_form(titulo: 'Formulário de Tarefas'),
           Rotas.telaDetalhes: (context) => const tela_detalhes(titulo: 'Detalhes da Tarefa'),

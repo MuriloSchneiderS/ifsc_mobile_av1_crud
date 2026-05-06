@@ -7,7 +7,7 @@ armazenada como Text, pesquise como você pode fazer essa transformação.
 import 'package:sqflite/sqflite.dart' as sqlite;
 import 'package:path/path.dart' as path;
 
-class DBUtil{
+class DB{
   static Future<sqlite.Database> getDatabase() async {
     final databasePath = await sqlite.getDatabasesPath();//salva o caminho para o diretório do bd
     final dbPath = path.join(databasePath, 'tarefas.db');//cria o caminho completo para o bd

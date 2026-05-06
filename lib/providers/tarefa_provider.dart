@@ -14,24 +14,47 @@ import 'package:ifsc_mobile_av1_crud/models/tarefa.dart';
 
 class TarefaProvider extends ChangeNotifier {
   List<Tarefa> _tarefas = [];//lista de tarefas gerenciada pelo provider
+
+  List<Tarefa> get tarefasDummy{
+    _tarefas = [
+      Tarefa(
+        titulo: 'Tarefa 1',
+        descricao: 'Descrição da tarefa 1',
+        responsavel: 'Fulano',
+        dataPrevista: DateTime.now().add(Duration(days: 2)),
+        importante: true,
+        realizada: false
+      ),
+      Tarefa(
+        titulo: 'Tarefa 2',
+        descricao: 'Descrição da tarefa 2',
+        responsavel: 'Ciclano',
+        dataPrevista: DateTime.now().add(Duration(days: 5)),
+        importante: false,
+        realizada: false
+      ),
+    ];
+    return _tarefas;
+  }
+
   List<Tarefa> get tarefas => _tarefas;//getter que acessa a lista de tarefas
 
-  //CRUD (utilizando os métodos do DBUtil -> util.db.dart)
+  //CRUD (utilizando os métodos do DB -> util.db.dart)
   Future<void> addTarefa(Tarefa tarefa) async {
-    await DBUtil.create(tarefa.toMap());
+    await DB.create(tarefa.toMap());
     await loadTarefas();
   }
   Future<void> loadTarefas() async {
-    final tarefasRetornadas = await DBUtil.read('');
+    final tarefasRetornadas = await DB.read('');
     _tarefas = tarefasRetornadas.map((item) => Tarefa.fromMap(item)).toList();
     notifyListeners();
   }
   Future<void> updateTarefa(int id, Tarefa tarefa) async {
-    await DBUtil.update(id, tarefa.toMap());
+    await DB.update(id, tarefa.toMap());
     await loadTarefas();
   }
   Future<void> deleteTarefa(int id) async {
-    await DBUtil.delete(id);
+    await DB.delete(id);
     await loadTarefas();
   }
 }
