@@ -45,25 +45,52 @@ class _TelaListaState extends State<TelaLista> {
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             subtitle: Text('Data prevista: ${tarefa.dataPrevista.toLocal()}'),
-            leading: Icon(
-              tarefa.realizada ? Icons.check_circle : Icons.circle_outlined,
+            leading: IconButton(
+              icon: Icon(
+                tarefa.realizada ? Icons.check_circle : Icons.circle_outlined,
+              ),
+              onPressed: () {
+                provider.updateTarefa(
+                  tarefa.id!,
+                  Tarefa(
+                    titulo: tarefa.titulo,
+                    descricao: tarefa.descricao,
+                    responsavel: tarefa.responsavel,
+                    dataPrevista: tarefa.dataPrevista,
+                    importante: tarefa.importante,
+                    realizada: !tarefa.realizada,
+                  ),
+                );
+              },
             ),
-            trailing: Icon(tarefa.importante ? Icons.star : Icons.star_border),
+            trailing: IconButton(
+              icon: Icon(tarefa.importante ? Icons.star : Icons.star_border),
+              onPressed: () {
+                provider.updateTarefa(
+                  tarefa.id!,
+                  Tarefa(
+                    titulo: tarefa.titulo,
+                    descricao: tarefa.descricao,
+                    responsavel: tarefa.responsavel,
+                    dataPrevista: tarefa.dataPrevista,
+                    importante: !tarefa.importante,
+                    realizada: tarefa.realizada,
+                  ),
+                );
+              },
+            ),
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                Rotas.telaDetalhes,
-                arguments: tarefa,
-              );
+              Navigator.pushNamed(context, Rotas.telaDetalhes, arguments: tarefa);
             },
           );
         },
       ),
+      //Novo
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, Rotas.telaForm);
         },
-        child: Icon(Icons.list),
+        child: Icon(Icons.add),
       ),
     );
   }
