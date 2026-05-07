@@ -71,12 +71,6 @@ class _TelaInicialState extends State<TelaInicial> {
                 ],
               ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, Rotas.telaLista);
-        },
-        child: Icon(Icons.list),
-      ),
     );
   }
 }
