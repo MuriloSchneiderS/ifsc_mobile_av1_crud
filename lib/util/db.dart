@@ -63,7 +63,9 @@ class DB {
 
   static Future<void> update(int id, Map<String, dynamic> tarefa) async {
     final db = await getDatabase();
-    await db.update('tarefas', tarefa, where: 'id = ?', whereArgs: [id]);
+    final tarefaData = Map<String, dynamic>.from(tarefa);
+    tarefaData.remove('id');
+    await db.update('tarefas', tarefaData, where: 'id = ?', whereArgs: [id]);
   }
 
   static Future<void> delete(int id) async {
