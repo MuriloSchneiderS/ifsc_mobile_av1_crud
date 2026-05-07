@@ -11,7 +11,7 @@ class Tarefa implements Model {
   int? _id;
   String titulo;
   String descricao;
-  String responsavel;//extra
+  String responsavel; //extra
   DateTime dataPrevista;
   bool importante;
   bool realizada;
@@ -22,7 +22,7 @@ class Tarefa implements Model {
     required this.responsavel,
     required this.dataPrevista,
     required this.importante,
-    required this.realizada
+    required this.realizada,
   });
 
   @override
@@ -40,22 +40,26 @@ class Tarefa implements Model {
       responsavel: map['responsavel'],
       dataPrevista: DateTime.parse(map['dataPrevista']),
       importante: map['importante'] == 1,
-      realizada: map['realizada'] == 1
+      realizada: map['realizada'] == 1,
     );
     tarefa.id = map['id'];
     return tarefa;
   }
 
+  @override
   Map<String, dynamic> toMap() {
-    return {
-      'id': _id,
+    final map = <String, dynamic>{
       'titulo': titulo,
       'descricao': descricao,
       'responsavel': responsavel,
       'dataPrevista': dataPrevista.toIso8601String(),
       'importante': importante ? 1 : 0,
-      'realizada': realizada ? 1 : 0
+      'realizada': realizada ? 1 : 0,
     };
+    if (_id != null) {
+      map['id'] = _id;
+    }
+    return map;
   }
 
   @override
