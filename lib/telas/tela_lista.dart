@@ -66,10 +66,10 @@ class _TelaListaState extends State<TelaLista> {
             Expanded(
               child: TabBarView(
                 children: [
-                  _buildTabContent('all'),
-                  _buildTabContent('importante'),
-                  _buildTabContent('realizada'),
-                  _buildTabContent('atrasada'),
+                  _construirAba('Todas'),
+                  _construirAba('Importantes'),
+                  _construirAba('Realizadas'),
+                  _construirAba('Atrasadas'),
                 ],
               ),
             ),
@@ -93,16 +93,16 @@ class _TelaListaState extends State<TelaLista> {
     );
   }
 
-  Widget _buildTabContent(String tab) {
+  Widget _construirAba(String tab) {//constrói o conteúdo de cada aba com base no filtro selecionado
     bool Function(Tarefa) filtroFn;
     Widget? alternaWidget;
 
     switch (tab) { //define a função de filtro e o widget de toggle para cada aba
-      case 'all'://sem filtro, mostra todas as tarefas
+      case 'Todas'://sem filtro, mostra todas as tarefas
         filtroFn = (t) => true;
         break;
       //cada caso define um filtro específico e um widget de toggle para ativar/desativar o filtro
-      case 'importante':
+      case 'Importantes':
         filtroFn = (t) => t.importante == filtroImportante;
         alternaWidget = SwitchListTile(
           title: Text(filtroImportante ? 'Importantes' : 'Não Importantes'),
@@ -110,7 +110,7 @@ class _TelaListaState extends State<TelaLista> {
           onChanged: (v) => setState(() => filtroImportante = v),
         );
         break;
-      case 'realizada':
+      case 'Realizadas':
         filtroFn = (t) => t.realizada == filtroRealizada;
         alternaWidget = SwitchListTile(
           title: Text(filtroRealizada ? 'Realizadas' : 'Não Realizadas'),
@@ -118,7 +118,7 @@ class _TelaListaState extends State<TelaLista> {
           onChanged: (v) => setState(() => filtroRealizada = v),
         );
         break;
-      case 'atrasada':
+      case 'Atrasadas':
         filtroFn = (t) => (t.dataPrevista.isBefore(DateTime.now()) && !t.realizada) == filtroAtrasada;
         alternaWidget = SwitchListTile(
           title: Text(filtroAtrasada ? 'Atrasadas' : 'Não Atrasadas'),
@@ -133,12 +133,12 @@ class _TelaListaState extends State<TelaLista> {
     return Column(
       children: [
         ?alternaWidget,
-        Expanded(child: _buildFilteredListView(filtroFn)),
+        Expanded(child: _construirListaFiltrada(filtroFn)),
       ],
     );
   }
 
-  Widget _buildFilteredListView(bool Function(Tarefa) filtroFn) {
+  Widget _construirListaFiltrada(bool Function(Tarefa) filtroFn) {//constrói a lista de tarefas filtradas com base na função de filtro fornecida
     var provider = Provider.of<TarefaProvider>(context);
     final List<Tarefa> tarefas = provider.tarefas.where(filtroFn).toList();
     return ListView.builder(
@@ -152,7 +152,7 @@ class _TelaListaState extends State<TelaLista> {
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           subtitle: Text('Data prevista: ${tarefa.dataPrevista.toLocal().toString().substring(0, 16)}'),
-          leading: IconButton(
+          leading: IconButton(//ícone para marcar como realizada ou não realizada, desabilitado durante a atualização para evitar múltiplas requisições
             icon: Icon(
               tarefa.realizada ? Icons.check_circle : Icons.circle_outlined,
             ),
@@ -170,7 +170,7 @@ class _TelaListaState extends State<TelaLista> {
               );
             },
           ),
-          trailing: IconButton(
+          trailing: IconButton(//ícone para marcar como importante ou não importante, desabilitado durante a atualização para evitar múltiplas requisições
             icon: Icon(tarefa.importante ? Icons.star : Icons.star_border),
             onPressed: isUpdating ? null : () {
               _atualizarTarefaComDebounce(
@@ -186,7 +186,7 @@ class _TelaListaState extends State<TelaLista> {
               );
             },
           ),
-          onTap: isUpdating ? null : () {
+          onTap: isUpdating ? null : () {//navega para a tela de detalhes da tarefa, desabilitado durante a atualização para evitar múltiplas requisições
             Navigator.pushNamed(context, Rotas.telaDetalhes, arguments: tarefa);
           },
         );
