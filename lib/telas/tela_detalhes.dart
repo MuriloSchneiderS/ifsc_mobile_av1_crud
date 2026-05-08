@@ -73,10 +73,9 @@ class _TelaDetalhesState extends State<TelaDetalhes> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("tela DETALHES", 
+                Text("${tarefaAtualizada.id} - ${tarefaAtualizada.titulo}", 
                   style: TextStyle(fontSize: 24)
                   ),
-                Text("Título: ${tarefaAtualizada.titulo}"),
                 Text("Descrição: ${tarefaAtualizada.descricao}"),
                 Text("Responsável: ${tarefaAtualizada.responsavel}"),
                 Text("Data Prevista: ${tarefaAtualizada.dataPrevista.toString().substring(0, 16)}"),
