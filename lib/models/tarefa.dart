@@ -11,7 +11,7 @@ class Tarefa implements Model {
   int? _id;
   String titulo;
   String descricao;
-  String responsavel; //extra
+  String responsavel;//extra
   DateTime dataPrevista;
   bool importante;
   bool realizada;
@@ -33,7 +33,7 @@ class Tarefa implements Model {
   @override
   int? get id => _id;
 
-  factory Tarefa.fromMap(Map<String, dynamic> map) {
+  factory Tarefa.fromMap(Map<String, dynamic> map) {//converte um mapa do banco de dados para um objeto Tarefa
     var tarefa = Tarefa(
       titulo: map['titulo'],
       descricao: map['descricao'],
@@ -47,12 +47,12 @@ class Tarefa implements Model {
   }
 
   @override
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap() {//converte um objeto Tarefa para um mapa que pode ser salvo no banco de dados
     final map = <String, dynamic>{
       'titulo': titulo,
       'descricao': descricao,
       'responsavel': responsavel,
-      'dataPrevista': dataPrevista.toIso8601String(),
+      'dataPrevista': dataPrevista.toIso8601String(),//converte a data para string no formato padrão para datas
       'importante': importante ? 1 : 0,
       'realizada': realizada ? 1 : 0,
     };
