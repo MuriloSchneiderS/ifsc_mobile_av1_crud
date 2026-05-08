@@ -13,7 +13,7 @@ class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key, required this.titulo});
 
   @override
-  State<TelaInicial> createState() => _TelaInicialState();
+  State<TelaInicial> createState() => _TelaInicialState();//estado onde a lógica de exibição da tarefa mais próxima de vencer e navegação para a lista completa será implementada
 }
 
 class _TelaInicialState extends State<TelaInicial> {
@@ -71,6 +71,12 @@ class _TelaInicialState extends State<TelaInicial> {
                 ],
               ),
       ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, Rotas.telaForm);
+          },
+          child: Icon(Icons.add),
+        ),
     );
   }
 }
