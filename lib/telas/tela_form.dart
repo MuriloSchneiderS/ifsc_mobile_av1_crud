@@ -19,40 +19,127 @@ class TelaForm extends StatefulWidget {
 }
 
 class _TelaFormState extends State<TelaForm> {
+  int? _tarefaId;
+  DateTime dataPrevista = DateTime.now();
   var _importante = false;
   var _realizada = false;
+  var _editando = false;
+  var _salvando = false;
+  //controladores para os campos de texto
   final _tituloController = TextEditingController();
+  final _descricaoController = TextEditingController();
+  final _responsavelController = TextEditingController();
+
+  String _formataDataPrevista() {//dd/MM/yyyy HH:mm
+    final local = dataPrevista.toLocal();
+    final day = local.day.toString().padLeft(2, '0');
+    final month = local.month.toString().padLeft(2, '0');
+    final year = local.year;
+    final hour = local.hour.toString().padLeft(2, '0');
+    final minute = local.minute.toString().padLeft(2, '0');
+    return '$day/$month/$year $hour:$minute';
+  }
+
+  Future<void> _selecionarDataHora() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: dataPrevista,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate == null || !mounted) {//verifica se o usuário cancelou a seleção ou se o widget foi desmontado
+      return;
+    }
+
+    final TimeOfDay initialTime = TimeOfDay.fromDateTime(dataPrevista);
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+
+    if (pickedTime == null) {//verifica se o usuário cancelou a seleção de horário
+      return;
+    }
+
+    setState(() {
+      dataPrevista = DateTime(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+        pickedTime.hour,
+        pickedTime.minute,
+      );
+    });
+  }
 
   Future<void> _salvarTarefa() async {
+    if (_salvando) {//evita que o usuário clique várias vezes no botão de salvar enquanto a tarefa está sendo salva
+      return;
+    }
+
     final titulo = _tituloController.text.trim();
-    if (titulo.isEmpty) {
+    if (titulo.isEmpty) {//exibe mensagem de erro se o título estiver vazio
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Informe um título para a tarefa.')),
       );
       return;
     }
-    final descricao = TextEditingController().text.trim();
-    final responsavel = TextEditingController().text.trim();
+    final descricao = _descricaoController.text.trim();
+    final responsavel = _responsavelController.text.trim();
 
-    final tarefa = Tarefa(
-      titulo: titulo,
-      descricao: descricao,
-      responsavel: responsavel,
-      dataPrevista: DateTime.now(),
-      importante: _importante,
-      realizada: _realizada,
-    );
+    _salvando = true;
+    setState(() {});
 
-    final provider = Provider.of<TarefaProvider>(context, listen: false);
-    await provider.addTarefa(tarefa);
-    if (!mounted) return;
-    Navigator.pop(context);
+    try {
+      final tarefa = Tarefa(
+        titulo: titulo,
+        descricao: descricao,
+        responsavel: responsavel,
+        dataPrevista: dataPrevista,
+        importante: _importante,
+        realizada: _realizada,
+      );
+      if (_tarefaId != null) {//se já tiver id, esta editando e deve manter o id
+        tarefa.id = _tarefaId!;
+      }
+
+      final provider = Provider.of<TarefaProvider>(context, listen: false);
+      if (_editando && _tarefaId != null) {
+        await provider.updateTarefa(_tarefaId!, tarefa);
+      } else {
+        await provider.addTarefa(tarefa);
+      }
+      if (!mounted) return;
+      Navigator.pop(context);
+    } finally {//garante que o estado de salvando seja atualizado mesmo que ocorra um erro
+      if (mounted) {
+        _salvando = false;
+        setState(() {});
+      }
+    }
   }
 
+  var _initialized = false;
+
   @override
-  void dispose() {
-    _tituloController.dispose();
-    super.dispose();
+  void didChangeDependencies() {//carrega os dados da tarefa para edição
+    super.didChangeDependencies();
+    //evita que o código seja executado mais de uma vez
+    if (_initialized) return;
+      _initialized = true;
+    
+    final args = ModalRoute.of(context)?.settings.arguments;//pega os argumentos passados para a rota, que nesse caso é a tarefa a ser editada
+    if (args is Tarefa) {
+      _editando = true;
+      _tarefaId = args.id;
+      _tituloController.text = args.titulo;
+      _descricaoController.text = args.descricao;
+      _responsavelController.text = args.responsavel;
+      dataPrevista = args.dataPrevista;
+      _importante = args.importante;
+      _realizada = args.realizada;
+    }
   }
 
   @override
@@ -68,10 +155,25 @@ class _TelaFormState extends State<TelaForm> {
               decoration: InputDecoration(labelText: 'Título'),
             ),
             TextField(
+              controller: _descricaoController,
               decoration: InputDecoration(labelText: 'Descrição'),
             ),
-             TextField(
+            TextField(
+              controller: _responsavelController,
               decoration: InputDecoration(labelText: 'Responsável'),
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Text('Data Prevista: ${_formataDataPrevista()}'),
+                ),
+                SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: _selecionarDataHora,
+                  child: const Text('Selecionar data e hora'),
+                ),
+              ],
             ),
             SwitchListTile(
               title: Text('Importante'),
@@ -92,12 +194,26 @@ class _TelaFormState extends State<TelaForm> {
               },
             ),
             ElevatedButton(
-              onPressed: _salvarTarefa,
-              child: const Text('Salvar'),
+              onPressed: _salvando ? null : _salvarTarefa,
+              child: _salvando
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(_editando ? 'Atualizar' : 'Salvar'),
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _tituloController.dispose();
+    _descricaoController.dispose();
+    _responsavelController.dispose();
+    super.dispose();
   }
 }
