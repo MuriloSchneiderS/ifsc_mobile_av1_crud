@@ -45,7 +45,7 @@ class _TelaFormState extends State<TelaForm> {
       context: context,
       initialDate: dataPrevista,
       firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+      lastDate: DateTime(2100),
     );
 
     if (pickedDate == null || !mounted) {//verifica se o usuário cancelou a seleção ou se o widget foi desmontado
@@ -62,7 +62,7 @@ class _TelaFormState extends State<TelaForm> {
       return;
     }
 
-    setState(() {
+    setState(() {//atualiza a data prevista com a data e hora selecionadas
       dataPrevista = DateTime(
         pickedDate.year,
         pickedDate.month,
@@ -89,7 +89,7 @@ class _TelaFormState extends State<TelaForm> {
     final responsavel = _responsavelController.text.trim();
 
     _salvando = true;
-    setState(() {});
+    setState(() {});//atualiza o estado para mostrar o indicador de carregamento no botão de salvar
 
     try {
       final tarefa = Tarefa(
@@ -115,7 +115,7 @@ class _TelaFormState extends State<TelaForm> {
     } finally {//garante que o estado de salvando seja atualizado mesmo que ocorra um erro
       if (mounted) {
         _salvando = false;
-        setState(() {});
+        setState(() {});//atualiza o estado para esconder o indicador de carregamento no botão de salvar
       }
     }
   }
@@ -179,7 +179,7 @@ class _TelaFormState extends State<TelaForm> {
               title: Text('Importante'),
               value: _importante,
               onChanged: (value) {
-                setState(() {
+                setState(() {//atualiza o estado de importante quando o switch for alternado
                   _importante = value;
                 });
               },
@@ -187,8 +187,8 @@ class _TelaFormState extends State<TelaForm> {
             SwitchListTile(
               title: Text('Realizada'),
               value: _realizada,
-              onChanged: (value) {
-                setState(() {
+              onChanged: _editando ? null : (value) {
+                setState(() {//atualiza o estado de realizada quando o switch for alternado
                   _realizada = value;
                 });
               },
