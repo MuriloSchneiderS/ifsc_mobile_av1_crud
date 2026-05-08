@@ -57,8 +57,8 @@ class _TelaInicialState extends State<TelaInicial> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 10),
-                  Text(
-                    '${tarefas[0].titulo} - ${tarefas[0].dataPrevista.toLocal()}',
+                  Text(//exibe o título e data prevista da tarefa mais próxima de vencer
+                    '${tarefas[0].titulo} - ${tarefas[0].dataPrevista.toLocal().toString().substring(0, 16)}',//formata a data para exibir apenas data e hora
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(height: 20),
