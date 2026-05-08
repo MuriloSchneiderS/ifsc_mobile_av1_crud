@@ -15,28 +15,6 @@ import 'package:ifsc_mobile_av1_crud/models/tarefa.dart';
 class TarefaProvider extends ChangeNotifier {
   List<Tarefa> _tarefas = [];//lista de tarefas gerenciada pelo provider
 
-  List<Tarefa> get tarefasDummy{
-    _tarefas = [
-      Tarefa(
-        titulo: 'Tarefa 1',
-        descricao: 'Descrição da tarefa 1',
-        responsavel: 'Fulano',
-        dataPrevista: DateTime.now().add(Duration(days: 2)),
-        importante: true,
-        realizada: false
-      ),
-      Tarefa(
-        titulo: 'Tarefa 2',
-        descricao: 'Descrição da tarefa 2',
-        responsavel: 'Ciclano',
-        dataPrevista: DateTime.now().add(Duration(days: 5)),
-        importante: false,
-        realizada: false
-      ),
-    ];
-    return _tarefas;
-  }
-
   List<Tarefa> get tarefas => _tarefas;//getter que acessa a lista de tarefas
 
   //CRUD (utilizando os métodos do DB -> util.db.dart)
