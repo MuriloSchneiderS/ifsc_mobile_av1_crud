@@ -62,6 +62,16 @@ class Tarefa implements Model {
     return map;
   }
 
+  String get dataFormatada {//formata a data prevista para o formato dd/MM/yyyy HH:mm
+    final dia = dataPrevista.day.toString().padLeft(2, '0');
+    final mes = dataPrevista.month.toString().padLeft(2, '0');
+    final ano = dataPrevista.year;
+    final hora = dataPrevista.hour.toString().padLeft(2, '0');
+    final minuto = dataPrevista.minute.toString().padLeft(2, '0');
+    
+    return '$dia/$mes/$ano $hora:$minuto';
+  }
+
   @override
   String toString() {
     return 'Tarefa{id: $_id, titulo: $titulo, descricao: $descricao, responsavel: $responsavel, dataPrevista: $dataPrevista, importante: $importante, realizada: $realizada}';

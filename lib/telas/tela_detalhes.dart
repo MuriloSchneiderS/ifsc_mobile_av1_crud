@@ -78,7 +78,7 @@ class _TelaDetalhesState extends State<TelaDetalhes> {
                 ),
                 Text("Descrição: ${tarefaAtualizada.descricao}"),
                 Text("Responsável: ${tarefaAtualizada.responsavel}"),
-                Text("Data Prevista: ${tarefaAtualizada.dataPrevista.toString().substring(0, 16)}",),
+                Text("Data Prevista: ${tarefaAtualizada.dataFormatada}",),
                 Text("Importante: ${tarefaAtualizada.importante ? 'Sim' : 'Não'}",),
                 SizedBox(height: 20),
                 SwitchListTile(//switch para marcar a tarefa como realizada ou não realizada

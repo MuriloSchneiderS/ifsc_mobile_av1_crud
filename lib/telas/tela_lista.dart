@@ -151,7 +151,7 @@ class _TelaListaState extends State<TelaLista> {
             tarefa.titulo,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          subtitle: Text('Data prevista: ${tarefa.dataPrevista.toLocal().toString().substring(0, 16)}'),
+          subtitle: Text('Data prevista: ${tarefa.dataFormatada}'),
           leading: IconButton(//ícone para marcar como realizada ou não realizada, desabilitado durante a atualização para evitar múltiplas requisições
             icon: Icon(
               tarefa.realizada ? Icons.check_circle : Icons.circle_outlined,

@@ -126,9 +126,11 @@ class _TelaFormState extends State<TelaForm> {
   void didChangeDependencies() {//carrega os dados da tarefa para edição
     super.didChangeDependencies();
     //evita que o código seja executado mais de uma vez
-    if (_initialized) return;
-      _initialized = true;
-    
+    if (_initialized) {
+      return;
+    }
+    _initialized = true;
+
     final args = ModalRoute.of(context)?.settings.arguments;//pega os argumentos passados para a rota, que nesse caso é a tarefa a ser editada
     if (args is Tarefa) {
       _editando = true;
