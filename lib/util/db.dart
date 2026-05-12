@@ -19,12 +19,11 @@ class DB {
       sqlite.databaseFactory = databaseFactoryFfi;
     }
 
-    final databasePath = await sqlite
-        .getDatabasesPath(); //salva o caminho para o diretório do bd
-    final dbPath = path.join(
+    final databasePath = await sqlite.getDatabasesPath(); //salva o caminho para o diretório do bd
+    final dbPath = path.join(//caminho completo para o bd "tarefas.db"
       databasePath,
       'tarefas.db',
-    ); //cria o caminho completo para o bd
+    );
 
     //abre o banco de dados, se não existir ele é criado
     return await sqlite.openDatabase(
@@ -51,7 +50,6 @@ class DB {
     final db = await getDatabase();
     await db.insert('tarefas', tarefa);
   }
-
   static Future<List<Map<String, dynamic>>> read(String busca) async {
     final db = await getDatabase();
     return await db.query(
@@ -60,14 +58,12 @@ class DB {
       whereArgs: ['%$busca%'],
     );
   }
-
   static Future<void> update(int id, Map<String, dynamic> tarefa) async {
     final db = await getDatabase();
     final tarefaData = Map<String, dynamic>.from(tarefa);
     tarefaData.remove('id');
     await db.update('tarefas', tarefaData, where: 'id = ?', whereArgs: [id]);
   }
-
   static Future<void> delete(int id) async {
     final db = await getDatabase();
     await db.delete('tarefas', where: 'id = ?', whereArgs: [id]);
