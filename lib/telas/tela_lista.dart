@@ -27,30 +27,11 @@ class _TelaListaState extends State<TelaLista> {
   final Set<int?> _atualizando = {};
 
   @override
-  void initState() {
+  void initState() {//estado inicial onde as tarefas são carregadas do bd
     super.initState();
-    Future.microtask(
+    Future.microtask(//garante que a carga das tarefas ocorra após a construção do widget, evitando erros de contexto
       () => Provider.of<TarefaProvider>(context, listen: false).loadTarefas(),
     );
-  }
-
-  Future<void> _atualizarTarefaComDebounce(int tarefaId, Tarefa tarefa) async {
-    if (_atualizando.contains(tarefaId)) {
-      return;
-    }
-    
-    _atualizando.add(tarefaId);
-    setState(() {});
-    
-    try {
-      final provider = Provider.of<TarefaProvider>(context, listen: false);
-      await provider.updateTarefa(tarefaId, tarefa);
-    } finally {
-      if (mounted) {
-        _atualizando.remove(tarefaId);
-        setState(() {});
-      }
-    }
   }
 
   @override
@@ -63,8 +44,8 @@ class _TelaListaState extends State<TelaLista> {
         ),
         body: Column(
           children: [
-            Expanded(
-              child: TabBarView(
+            Expanded(//expande o TabBarView para ocupar o espaço disponível abaixo do AppBar
+              child: TabBarView(//conteúdo de cada aba, onde cada aba é construída por meio do método _construirAba passando o nome da aba como argumento
                 children: [
                   _construirAba('Todas'),
                   _construirAba('Importantes'),
@@ -73,7 +54,7 @@ class _TelaListaState extends State<TelaLista> {
                 ],
               ),
             ),
-            TabBar(
+            TabBar(//exibe o TabBar para navegação entre as abas, abaixo do TabBarView para ficar fixo na parte inferior da tela
               tabs: [
                 Tab(text: 'Todas'),
                 Tab(text: 'Importantes'),
@@ -170,7 +151,7 @@ class _TelaListaState extends State<TelaLista> {
               );
             },
           ),
-          trailing: IconButton(//ícone para marcar como importante ou não importante, desabilitado durante a atualização para evitar múltiplas requisições
+          trailing: IconButton(//ícone para marcar como importante ou não importante||
             icon: Icon(tarefa.importante ? Icons.star : Icons.star_border),
             onPressed: isUpdating ? null : () {
               _atualizarTarefaComDebounce(
@@ -186,11 +167,30 @@ class _TelaListaState extends State<TelaLista> {
               );
             },
           ),
-          onTap: isUpdating ? null : () {//navega para a tela de detalhes da tarefa, desabilitado durante a atualização para evitar múltiplas requisições
+          onTap: isUpdating ? null : () {//navega para a tela de detalhes da tarefa||
             Navigator.pushNamed(context, Rotas.telaDetalhes, arguments: tarefa);
           },
         );
       },
     );
+  }
+  
+  Future<void> _atualizarTarefaComDebounce(int tarefaId, Tarefa tarefa) async {//método para atualizar uma tarefa com debounce, evitando múltiplas requisições simultâneas para a mesma tarefa
+    if (_atualizando.contains(tarefaId)) {
+      return;
+    }
+    
+    _atualizando.add(tarefaId);
+    setState(() {});
+    
+    try {
+      final provider = Provider.of<TarefaProvider>(context, listen: false);
+      await provider.updateTarefa(tarefaId, tarefa);
+    } finally {
+      if (mounted) {
+        _atualizando.remove(tarefaId);
+        setState(() {});
+      }
+    }
   }
 }
